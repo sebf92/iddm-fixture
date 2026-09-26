@@ -9,7 +9,7 @@
   "env": ".env",
   "auth": {
     "path": "./deployment.py:auth",
-    "disable_studio_auth": true
+    "disable_studio_auth": false
   },
   "http": {
     "app": "./deployment.py:app",

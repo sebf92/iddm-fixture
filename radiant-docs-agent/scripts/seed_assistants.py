@@ -7,7 +7,10 @@ entries for one deployment. Running it again updates the assistant in place.
 
 Usage (from radiant-docs-agent/):
     LANGGRAPH_DEPLOYMENT_URL=https://<deployment>.us.langgraph.app \
-        uv run python scripts/seed_assistants.py
+        uv run python scripts/seed_assistants.py [--studio-auth]
+
+Add --studio-auth against a live deployment (see main()). A local
+`langgraph dev` with MDA_LOCAL_DEV=1 does not need it.
 
 LANGSMITH_API_KEY is read from the environment or from .env.
 """
@@ -60,7 +63,12 @@ def main() -> None:
     if not url:
         sys.exit("Set LANGGRAPH_DEPLOYMENT_URL to the deployment's API URL")
 
-    client = get_sync_client(url=url, api_key=_api_key())
+    # Managed auth lets only Studio principals write assistants, so a plain
+    # API-key caller gets 403 on a live deployment. --studio-auth sends
+    # `x-auth-scheme: langsmith`, the path Studio takes: the platform verifies
+    # the workspace API key instead of the MDA custom auth. Opt-in only.
+    headers = {"x-auth-scheme": "langsmith"} if "--studio-auth" in sys.argv[1:] else None
+    client = get_sync_client(url=url, api_key=_api_key(), headers=headers)
     existing = [
         a
         for a in client.assistants.search(graph_id=GRAPH_ID, limit=100)
