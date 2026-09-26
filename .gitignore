@@ -1,0 +1,19 @@
+# Secrets — never commit real API keys.
+.env
+.env.*
+
+# Python virtualenvs and caches.
+.venv/
+__pycache__/
+*.pyc
+
+# Managed Deep Agent build output.
+.mda/
+
+# Local symlink with an absolute path.
+.claude/skills/
+
+# OS / editor junk.
+.DS_Store
+Thumbs.db
+desktop.ini
