@@ -1,0 +1,31 @@
+{
+  "python_version": "3.12",
+  "dependencies": [
+    ".",
+    "deepagents>=0.7.5",
+    "langchain>=1.3.15",
+    "langchain-openai>=1.4.2",
+    "langchain-mcp-adapters>=0.3.2",
+    "langgraph>=1.2.10",
+    "langgraph-checkpoint>=4.2.0",
+    "langgraph-sdk>=0.4.2",
+    "langsmith>=0.10.17",
+    "mcp>=1.24.0,<2.0.0",
+    "pyjwt[crypto]>=2.8.0"
+  ],
+  "graphs": {
+    "radiant-docs-agent": "./deployment.py:agent"
+  },
+  "env": ".env",
+  "auth": {
+    "path": "./deployment.py:auth",
+    "disable_studio_auth": true
+  },
+  "http": {
+    "app": "./deployment.py:app",
+    "middleware_order": "middleware_first",
+    "configurable_headers": {
+      "includes": ["x-mda-user-id"]
+    }
+  }
+}
